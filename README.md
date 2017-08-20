@@ -1,5 +1,5 @@
 # BLP
-This code is used for BLP-random coefficients estimation. Essentially, it tries to replicate the results in 'A Research Assistant's Guide to Random Coefficient Discrete Choice Models of Demand' by Aviv Nevo. While Nevo's GMM objective function's value is 14.9, I extend the number of iterations to reach objective function value 4.56. The results are more precise given Nevo's fake data. However, one problem is that my standard errors are likely to be incorrect. I can't find the bugs yet, likely in the Jacobian function. 
+This code is for BLP-random coefficients estimation. Essentially, it tries to replicate the results in 'A Research Assistant's Guide to Random Coefficient Discrete Choice Models of Demand' by Aviv Nevo. While Nevo's GMM objective function's value is 14.9, I extend the number of iterations to reach objective function value 4.56. The results are more precise given Nevo's fake data. However, one problem is that my standard errors are likely to be incorrect. I can't find the bugs yet, likely in the Jacobian function. 
 
 ```
 Warning: Maximum number of iterations has been exceeded.
