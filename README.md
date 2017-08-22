@@ -1,25 +1,29 @@
 # BLP
 This code is for BLP-random coefficients estimation. Essentially, it tries to replicate the results in 'A Research Assistant's Guide to Random Coefficient Discrete Choice Models of Demand' by Aviv Nevo. While Nevo's GMM objective function's value is 14.9, I extend the number of iterations to reach objective function value 4.56. The results are more precise given Nevo's fake data. However, one problem is that my standard errors are likely to be incorrect. I can't find the bugs yet, likely in the Jacobian function. 
 
+# 2017/8/22 update:
+
+I found the bug which was cuasing wrong standard errors. Now the estimates and standard errors are correct. The minimum of the objective function is reached at around 45 iteration. It takes less than 10 mins to compute the results. 
+
 ```
 Warning: Maximum number of iterations has been exceeded.
-         Current function value: 4.562276
-         Iterations: 40
-         Function evaluations: 675
-         Gradient evaluations: 45
+         Current function value: 4.561534
+         Iterations: 50
+         Function evaluations: 1170
+         Gradient evaluations: 78
 Mean Estimates:
                Mean        SD      Income   Income^2       Age      Child
-Constant  -2.012682  0.556899    2.297560   0.000000  1.287231   0.000000
-Price    -62.531714  3.305179  585.264225 -30.036636  0.000000  11.095503
-Sugar      0.116260 -0.005727   -0.384089   0.000000  0.052301   0.000000
-Mushy      0.499805  0.092130    0.757584   0.000000 -1.359024   0.000000
+Constant  -2.010873  0.558518    2.293647   0.000000  1.284360   0.000000
+Price    -62.791246  3.316215  589.490516 -30.252891  0.000000  11.050478
+Sugar      0.116244 -0.005813   -0.385428   0.000000  0.052287   0.000000
+Mushy      0.499868  0.093713    0.746653   0.000000 -1.353060   0.000000
 Standard Errors:
-               Mean        SD     Income    Income^2       Age     Child
-Constant   0.326163  0.162155   1.334189    0.000000  0.013491  0.000000
-Price     14.740366  0.185479   1.207367  269.330067  0.000000  0.120993
-Sugar      0.016024  0.800234  14.043097    0.000000  0.633089  0.000000
-Mushy      0.198622  0.025923   0.668999    0.000000  4.124887  0.000000
---- 359.14806294441223 seconds ---
+               Mean        SD      Income   Income^2       Age     Child
+Constant   0.327211  0.162715    1.210062   0.000000  0.630978  0.000000
+Price     14.827514  1.342623  270.905894  14.125879  0.000000  4.122291
+Sugar      0.016047  0.013513    0.121682   0.000000  0.026011  0.000000
+Mushy      0.198686  0.185443    0.803185   0.000000  0.666919  0.000000
+--- 602.1178584098816 seconds ---
 ```
 
 # Comparison: 
