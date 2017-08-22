@@ -1,5 +1,28 @@
 # BLP
-This code is for BLP-random coefficients estimation. Essentially, it tries to replicate the results in 'A Research Assistant's Guide to Random Coefficient Discrete Choice Models of Demand' by Aviv Nevo. While Nevo's GMM objective function's value is 14.9, I extend the number of iterations to reach objective function value 4.56. The results are more precise given Nevo's fake data. However, one problem is that my standard errors are likely to be incorrect. I can't find the bugs yet, likely in the Jacobian function. 
+This code is for BLP-random coefficients estimation. Essentially, it tries to replicate the results in 'A Research Assistant's Guide to Random Coefficient Discrete Choice Models of Demand' by Aviv Nevo. While Nevo's GMM objective function's value is 14.9, I extend the number of iterations to reach objective function value 4.56. The results are more precise given Nevo's fake data. 
+
+# Replication for Nevo (2000) Table I:
+
+```
+Warning: Maximum number of iterations has been exceeded.
+         Current function value: 14.895122
+         Iterations: 25
+         Function evaluations: 450
+         Gradient evaluations: 30
+Mean Estimates:
+               Mean        SD     Income  Income^2       Age      Child
+Constant  -1.952633  0.368435   3.191387  0.000000  1.078232   0.000000
+Price    -32.228194  1.849553  17.493097 -0.736473  0.000000  11.015146
+Sugar      0.138623 -0.002771  -0.194065  0.000000  0.031475   0.000000
+Mushy      0.616595  0.073966   1.411502  0.000000 -1.407856   0.000000
+Standard Errors:
+              Mean        SD      Income  Income^2       Age     Child
+Constant  0.255334  0.125979    1.137800  0.000000  0.898642  0.000000
+Price     7.785776  1.040751  173.058851  8.991769  0.000000  4.867536
+Sugar     0.012876  0.011941    0.044673  0.000000  0.034061  0.000000
+Mushy     0.187898  0.195609    0.662680  0.000000  1.001100  0.000000
+--- 321.60219740867615 seconds ---
+'''
 
 # 2017/8/22 update:
 
