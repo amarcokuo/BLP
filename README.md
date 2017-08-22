@@ -22,7 +22,8 @@ Price     7.785776  1.040751  173.058851  8.991769  0.000000  4.867536
 Sugar     0.012876  0.011941    0.044673  0.000000  0.034061  0.000000
 Mushy     0.187898  0.195609    0.662680  0.000000  1.001100  0.000000
 --- 321.60219740867615 seconds ---
-'''
+```
+There are some slight differences, which are probably due to the value of objective function and minimization method 
 
 # 2017/8/22 update:
 
