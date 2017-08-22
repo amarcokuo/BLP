@@ -87,7 +87,7 @@ class BLP():
         
         self.theta2_init = self.theta2w[np.where(self.theta2w != 0)]
         # theta2 is the initial nonlinear parameter guess 
-        
+
         
         ## create initial weight matrix
         self.invA = np.linalg.inv(np.dot(self.IV.T, self.IV))
@@ -105,14 +105,20 @@ class BLP():
         y = np.log(self.s_jt) - np.log(outshr)
         mid = self.x1.T @ self.IV @ self.invA @ self.IV.T
         t = np.linalg.inv(mid @ self.x1) @ mid @ y
+        
+
         self.d_old = self.x1 @ t
+        
+
         self.d_old = np.exp(self.d_old)
 
         self.gmmvalold = 0
         self.gmmdiff = 1
 
         self.iter = 0
-        
+        self.theta2 = self.theta2_init
+        self.delta = self.meanval(self.theta2_init, self.theti, self.thetj)
+        self.gmmresid = self.delta - self.x1 @ t
     def mktsh(self):
         # compute the market share for each product
         temp = self.ind_sh().T
@@ -152,7 +158,7 @@ class BLP():
             avgnorm = np.mean(t)
             self.d_old = self.d_new
             i += 1
-        #print ('# of iterations for delta convergence:', i)
+#        print ('# of iterations for delta convergence:', i)
         return np.log(self.d_new)       
     
     def mufunc(self, theta2w):
@@ -168,7 +174,7 @@ class BLP():
         return mu
 
     
-    def jacob(self, *args):
+    def jacob(self):
         theta2w = np.zeros((max(self.theti) + 1, max(self.thetj) + 1))
         for ind in range(len(self.theti)):
             theta2w[self.theti[ind], self.thetj[ind]] = self.theta2[ind]
@@ -199,7 +205,7 @@ class BLP():
             
             
         # computing (partial delta)/(partial theta2)
-        rel = self.theti + (self.thetj - 1) * max(self.theti)
+        #rel = self.theti  + (self.thetj ) * max(self.theti) Matlab and Python have different ways of where or find function. 
         rel = np.array([0, 1 , 2 , 3 , 4 , 5 , 6 , 7 , 9 , 12, 14, 15, 17]).flatten()
         f = np.zeros((self.cdid.shape[0], rel.shape[0]))
         n = 0
@@ -227,16 +233,19 @@ class BLP():
         
         f =  a @ Q.T @ self.invA @ omega @ self.invA @ Q @ a
         return f
-         
+    
+    # gradient_GMM is not used for estimation here.       
     def gradient_GMM (self):
         # Return gradient of GMM objective function
+
         jacob = self.jacob()
         gradient = 2*jacob.T @ self.IV @ self.invA @ self.IV.T @ self.gmmresid
+
         return gradient
     
-    def gmmobj(self, theta2, theti, thetj):
+    def gmmobj(self, theta2):
         # compute GMM objective function
-        self.delta = self.meanval(theta2, theti, thetj)
+        self.delta = self.meanval(theta2, self.theti, self.thetj)
         self.theta2 = theta2
         ##% the following deals with cases where the min algorithm drifts into region where the objective is not defined
         if max(np.isnan(self.delta)) == 1:
@@ -245,11 +254,13 @@ class BLP():
             temp1 = self.x1.T @ self.IV
             temp2 = self.delta.T @ self.IV
             #self.theta1 = np.linalg.inv(temp1 @ self.invA @ temp1.T) @ temp1 @ self.invA @ temp2.T
-            self.theta1 = sp.linalg.solve(temp1 @ self.invA @ temp1.T, temp1 @ self.invA @ temp2.T)
-            self.gmmresid = self.delta - self.x1 @ self.theta1
-            temp1 = self.gmmresid.T @ self.IV
 
-            f = temp1 @ self.invA @ temp1.T
+            self.theta1 = sp.linalg.solve(temp1 @ self.invA @ temp1.T, temp1 @ self.invA @ temp2.T)
+                
+            self.gmmresid = self.delta - self.x1 @ self.theta1
+            temp3 = self.gmmresid.T @ self.IV
+
+            f = temp3 @ self.invA @ temp3.T
 
         
 
@@ -257,9 +268,9 @@ class BLP():
         if self.gmmvalnew < self.gmmvalold:
             self.iter += 1
             
-            if self.iter % 10 ==0:
-                print ('# of valuations:', self.iter)
-                print ('gmm objective:', self.gmmvalnew)
+#            if self.iter % 10 ==0:
+#                print ('# of valuations:', self.iter)
+#                print ('gmm objective:', self.gmmvalnew)
             
         self.gmmdiff = np.abs(self.gmmvalold - self.gmmvalnew)
         self.gmmvalold = self.gmmvalnew
@@ -284,8 +295,8 @@ class BLP():
         a = np.zeros((4,5))
         t = np.insert(t, 1, theta1[0], axis=0) 
         k = 0
-        for i in range(len(theti)):
-            a[theti[i]][thetj[i]] = rex[k]
+        for i in range(len(self.theti)):
+            a[self.theti[i]][self.thetj[i]] = rex[k]
             k+=1
 
  
@@ -298,8 +309,11 @@ class BLP():
         beta_se = np.insert(beta_se, 1, se_all[:,0])
         other_se = np.zeros((4,5))
         j = 0
-        for p in range(len(theti)):
-            other_se[theti[p]][thetj[p]] = se_all[:,25+j]
+        # This is the assigning rules. 
+        row = np.array([0, 1, 2, 3, 0, 1, 2, 3, 1, 0, 2, 3, 1])
+        col = np.array([0, 0, 0, 0, 1, 1, 1, 1, 2, 3, 3, 3, 4])
+        for p in range(len(self.theti)):
+            other_se[row[p]][col[p]] = se_all[:,25+j]
             j+=1
             
             
@@ -319,17 +333,21 @@ class BLP():
 if __name__ == '__main__':
     import time
     start_time = time.time()
-    
+    Nfeval = 1
+    def callbackF(Xi):
+        global Nfeval
+        print  ( '{:>10}  {:10.4f}'.format(Nfeval, blp.gmmobj(Xi))) 
+
+        Nfeval += 1
+    print  ( '{:>10}  {:>10}'.format('Iter', 'f(X)'))  
     blp = BLP()
     init_theta = blp.theta2_init
-    theti = blp.theti
-    thetj = blp.thetj
+
     #gradient = blp.gradient_GMM()
-    res = minimize(blp.gmmobj, init_theta, args=(theti, thetj), method='BFGS', options={'maxiter':40, 'disp' : True})
+    res = minimize(blp.gmmobj, init_theta , method='BFGS', callback=callbackF,  options={'maxiter':50, 'disp' : True})
     print('Mean Estimates:')
     print(blp.result(blp.theta1, res.x))
     
     print('Standard Errors:')
     print(blp.se)
-    # Nelder-Mead
     print("--- %s seconds ---" % (time.time() - start_time))
