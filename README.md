@@ -4,50 +4,45 @@ This code is for BLP-random coefficients estimation. Essentially, it tries to re
 # Replication for Nevo (2000) Table I:
 
 ```
-Warning: Maximum number of iterations has been exceeded.
-         Current function value: 14.895122
-         Iterations: 25
-         Function evaluations: 450
-         Gradient evaluations: 30
 Mean Estimates:
                Mean        SD     Income  Income^2       Age      Child
-Constant  -1.952633  0.368435   3.191387  0.000000  1.078232   0.000000
-Price    -32.228194  1.849553  17.493097 -0.736473  0.000000  11.015146
-Sugar      0.138623 -0.002771  -0.194065  0.000000  0.031475   0.000000
-Mushy      0.616595  0.073966   1.411502  0.000000 -1.407856   0.000000
+Constant  -1.956236  0.367702   3.188302  0.000000  1.091190   0.000000
+Price    -32.164280  1.862521  15.462670 -0.629078  0.000000  10.954305
+Sugar      0.139150 -0.002463  -0.193821  0.000000  0.031423   0.000000
+Mushy      0.648903  0.077208   1.433925  0.000000 -1.432826   0.000000
 Standard Errors:
               Mean        SD      Income  Income^2       Age     Child
-Constant  0.255334  0.125979    1.137800  0.000000  0.898642  0.000000
-Price     7.785776  1.040751  173.058851  8.991769  0.000000  4.867536
-Sugar     0.012876  0.011941    0.044673  0.000000  0.034061  0.000000
-Mushy     0.187898  0.195609    0.662680  0.000000  1.001100  0.000000
---- 321.60219740867615 seconds ---
+Constant  0.254098  0.126959    1.153352  0.000000  0.918825  0.000000
+Price     7.716360  1.046685  172.175621  8.946287  0.000000  4.901362
+Sugar     0.012845  0.012000    0.044427  0.000000  0.034553  0.000000
+Mushy     0.191134  0.196911    0.671257  0.000000  1.021373  0.000000
+--- 214.407812833786 seconds ---
 ```
 There are some slight differences, which are probably due to the value of objective function and minimization method 
 
 # 2017/8/22 update:
 
-I found the bug which was cuasing wrong standard errors. Now the estimates and standard errors are correct. The minimum of the objective function is reached at around 45 iteration. It takes less than 10 mins to compute the results. 
+I found the bug which was cuasing wrong standard errors. Now the estimates and standard errors are correct. The minimum of the objective function is reached at around 45 iteration. It takes around 7 mins to compute the results. 
 
 ```
 Warning: Maximum number of iterations has been exceeded.
-         Current function value: 4.561534
+         Current function value: 4.561597
          Iterations: 50
-         Function evaluations: 1170
-         Gradient evaluations: 78
+         Function evaluations: 885
+         Gradient evaluations: 59
 Mean Estimates:
                Mean        SD      Income   Income^2       Age      Child
-Constant  -2.010873  0.558518    2.293647   0.000000  1.284360   0.000000
-Price    -62.791246  3.316215  589.490516 -30.252891  0.000000  11.050478
-Sugar      0.116244 -0.005813   -0.385428   0.000000  0.052287   0.000000
-Mushy      0.499868  0.093713    0.746653   0.000000 -1.353060   0.000000
+Constant  -2.011406  0.558994    2.293785   0.000000  1.284469   0.000000
+Price    -62.856428  3.320055  590.672038 -30.314168  0.000000  11.047769
+Sugar      0.116232 -0.005842   -0.385869   0.000000  0.052343   0.000000
+Mushy      0.500210  0.094235    0.745010   0.000000 -1.352803   0.000000
 Standard Errors:
-               Mean        SD      Income   Income^2       Age     Child
-Constant   0.327211  0.162715    1.210062   0.000000  0.630978  0.000000
-Price     14.827514  1.342623  270.905894  14.125879  0.000000  4.122291
-Sugar      0.016047  0.013513    0.121682   0.000000  0.026011  0.000000
-Mushy      0.198686  0.185443    0.803185   0.000000  0.666919  0.000000
---- 602.1178584098816 seconds ---
+               Mean        SD      Income   Income^2       Age    Child
+Constant   0.327458  0.162904    1.211498   0.000000  0.630778  0.00000
+Price     14.851506  1.345163  271.358937  14.149859  0.000000  4.12216
+Sugar      0.016058  0.013522    0.121895   0.000000  0.026040  0.00000
+Mushy      0.198818  0.185449    0.804220   0.000000  0.666749  0.00000
+--- 424.098836183548 seconds ---
 ```
 
 # Comparison: 
